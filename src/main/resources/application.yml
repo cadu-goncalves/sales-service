@@ -1,0 +1,64 @@
+#
+# https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+#
+
+#--------------
+# Spring
+#--------------
+spring:
+  application:
+    name: salesservice
+
+  # Profiles
+  profiles:
+    active:
+
+  # i18n
+  messages:
+    basename: messages
+    messages:
+      encoding: UTF-8
+
+  # MVC
+  mvc:
+    favicon:
+      enabled: false
+
+  # Data
+  data:
+    mongodb:
+      database: db-sales
+      host: localhost
+
+#--------------
+# HTTP Server
+#--------------
+server:
+  port: 8080
+
+
+#--------------
+# Migrations
+#--------------
+mongobee:
+    packageScan: com.viniland.sales.persistence.changelog
+
+#--------------
+# JWT
+#   see http://www.allkeysgenerator.com
+#   see https://jwt.io/
+#--------------
+jwt:
+  secret: SgUkXp2s5v8y/B?E(H+MbQeThWmYq3t6w9z$C&F)J@NcRfUjXn2r4u7x!A%D*G-K
+  claims:
+    iss: sales-service
+
+
+#--------------
+# Springfox
+#--------------
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /v1.0/api-docs

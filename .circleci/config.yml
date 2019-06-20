@@ -1,0 +1,130 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2.1
+
+#--------------
+# Aliases
+#--------------
+aliases:
+
+  - &_build_env
+    working_directory: ~/project # root folder for commands
+    docker:
+    - image: maven:3-jdk-8-alpine # primary container where jobs run
+    - image: circleci/mongo:4.0.1-xenial
+    environment:
+      MAVEN_OPTS: -Xmx3200m
+
+  - &_simple_env
+    working_directory: ~/project # root folder for commands
+    docker:
+    - image: maven:3-jdk-8-alpine # primary container where jobs run
+    environment:
+      MAVEN_OPTS: -Xmx3200m
+
+  - &_restore_cache_dependencies
+      keys:
+      - sales-service-dependencies-{{ checksum "pom.xml" }}
+
+  - &_cache_dependencies
+      paths:
+      - ~/.m2
+      key: sales-service-dependencies-{{ checksum "pom.xml" }}
+
+  - &_restore_workspace
+      at: ~/
+
+  - &_save_workspace
+      root: ~/
+      paths:
+      - .m2/*
+      - project/*
+
+  - &_filter_master
+      branches:
+        only:
+        - master
+
+#--------------
+# Jobs
+#--------------
+jobs:
+
+  build:
+    <<: *_build_env
+    steps:
+    - checkout
+    - restore_cache: *_restore_cache_dependencies
+    - run:
+        name: Dependencies
+        command: mvn dependency:resolve-plugins dependency:go-offline
+    - save_cache: *_cache_dependencies
+    - run:
+        name: Clean and Package
+        command: mvn clean package
+    - run:
+        name: Save Test Results
+        command: |
+          mkdir -p ~/junit/
+          find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/junit/ \;
+        when: always
+    - store_test_results:
+        path: ~/junit
+    - store_artifacts:
+        path: ~/junit
+    - store_artifacts:
+        path: target/user-service-*.jar.original
+    - persist_to_workspace: *_save_workspace
+
+  report:
+    <<: *_simple_env
+    steps:
+    - attach_workspace: *_restore_workspace
+    - restore_cache: *_restore_cache_dependencies
+    - run:
+        name: Build Report
+        command: mvn jacoco:report coveralls:report
+    - save_cache: *_cache_dependencies
+    - persist_to_workspace: *_save_workspace
+
+  deploy:
+    <<: *_simple_env
+    steps:
+    - attach_workspace: *_restore_workspace
+    - restore_cache: *_restore_cache_dependencies
+    - setup_remote_docker:
+        docker_layer_caching: true
+    - run:
+        name: Install Docker Client
+        command: |
+          set -x
+          VER="17.03.0-ce"
+          curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+          tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+          mv /tmp/docker/* /usr/bin
+    - run:
+        name: Publish Container
+        command: |
+          docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
+          mvn dockerfile:build dockerfile:push
+    - save_cache: *_cache_dependencies
+
+#--------------
+# Workflows
+#--------------
+workflows:
+
+  simple:
+    jobs:
+      - build
+      - report:
+          requires:
+             - build
+          filters: *_filter_master
+      - deploy:
+          requires:
+             - report
+          filters: *_filter_master
+

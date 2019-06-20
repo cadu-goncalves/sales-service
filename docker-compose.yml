@@ -1,0 +1,6 @@
+sales-db:
+  container_name: sales_db
+  image: mongo:4.0.1-xenial
+  ports:
+    - 27017:27017
+

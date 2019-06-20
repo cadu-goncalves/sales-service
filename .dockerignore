@@ -1,0 +1,4 @@
+.git/
+.circleci/
+src/
+docker-compose.yml
