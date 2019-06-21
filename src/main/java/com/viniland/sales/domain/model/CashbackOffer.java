@@ -1,29 +1,31 @@
 package com.viniland.sales.domain.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Map;
 
 /**
- * Album cashback model
+ * Cashback offers model
  */
-@Document(collection = "albums_cashback")
+@Document(collection = "cashback_offers")
 @Data
+@Builder
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class AlbumCashBack {
+@AllArgsConstructor
+@EqualsAndHashCode(of = { "id" })
+public class CashbackOffer {
 
     @Id
-    @EqualsAndHashCode.Include
     private WeekDay id;
 
     private Map<String, Double> values;
 
-    public static enum WeekDay {
+    /**
+     * Week days
+     */
+    public enum WeekDay {
 
         SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY;
 

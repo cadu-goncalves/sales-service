@@ -11,6 +11,7 @@ RUN         apk add ${OS_PACKAGES} --update --no-cache && \
 # Group & user
 RUN         addgroup -S -g 1000 service-user && \
             adduser -S -u 1000 -G service-user -h ${APP_HOME} service-user
+
 # Configure
 WORKDIR     ${APP_HOME}
 USER        service-user

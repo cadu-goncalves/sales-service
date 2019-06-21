@@ -4,18 +4,16 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 /**
- * Mongobee configurations mapping
+ * Spotify configurations mapping
  */
 @Component
 @Data
-@ConfigurationProperties("mongobee")
-public class MongobeeProperties {
+@ConfigurationProperties("spotify")
+public class SpotifyProperties {
 
-    private String packageScan;
+    private String id;
 
-    private Map<String, String> collections;
+    private String secret;
 
 }

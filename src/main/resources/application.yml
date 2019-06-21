@@ -28,7 +28,7 @@ spring:
   data:
     mongodb:
       database: db-sales
-      host: localhost
+      host: ${MONGO_HOST:localhost}
 
 #--------------
 # HTTP Server
@@ -36,12 +36,21 @@ spring:
 server:
   port: 8080
 
-
 #--------------
 # Migrations
 #--------------
 mongobee:
     packageScan: com.viniland.sales.persistence.changelog
+    collections:
+        changes: change_logs
+        locks: change_locks
+
+#--------------
+# Spotify
+#--------------
+spotify:
+    id: ${SPOTIFY_CLIENT_ID}
+    secret: ${SPOTIFY_CLIENT_SECRET}
 
 #--------------
 # JWT

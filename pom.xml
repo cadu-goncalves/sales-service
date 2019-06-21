@@ -23,6 +23,7 @@
         <framework.mongobee.version>0.13</framework.mongobee.version>
         <framework.lombok.version>1.18.2</framework.lombok.version>
         <framework.io.jsonwebtoken.version>0.10.5</framework.io.jsonwebtoken.version>
+        <framweork.spotify.client.version>2.2.0</framweork.spotify.client.version>
 
         <!-- Plugins -->
         <plugin.surefire.version>2.22.1</plugin.surefire.version>
@@ -99,6 +100,13 @@
             <groupId>com.github.mongobee</groupId>
             <artifactId>mongobee</artifactId>
             <version>${framework.mongobee.version}</version>
+        </dependency>
+
+        <!-- Spotify Client -->
+        <dependency>
+            <groupId>se.michaelthelin.spotify</groupId>
+            <artifactId>spotify-web-api-java</artifactId>
+            <version>${framweork.spotify.client.version}</version>
         </dependency>
 
         <!-- Lombok -->

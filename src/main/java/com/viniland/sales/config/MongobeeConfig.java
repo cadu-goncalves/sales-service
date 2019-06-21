@@ -31,6 +31,12 @@ public class MongobeeConfig {
     @Bean
     public Mongobee mongobee(Environment environment, MongoClient client) {
         Mongobee runner = new Mongobee(client);
+        if(mongobeeProperties.getCollections().keySet().contains("changes")) {
+            runner.setChangelogCollectionName(mongobeeProperties.getCollections().get("changes"));
+        }
+        if(mongobeeProperties.getCollections().keySet().contains("locks")) {
+            runner.setLockCollectionName(mongobeeProperties.getCollections().get("locks"));
+        }
         runner.setDbName(mongoProperties.getDatabase());
         // Define where to look for changelogs
         runner.setChangeLogsScanPackage(mongobeeProperties.getPackageScan());

@@ -1,0 +1,65 @@
+[
+  {
+    "_id": "SUNDAY",
+    "values": {
+      "pop": 25,
+      "mpb": 30,
+      "classical": 35,
+      "rock": 40
+    }
+  },
+  {
+    "_id": "MONDAY",
+    "values": {
+      "pop": 7,
+      "mpb": 5,
+      "classical": 3,
+      "rock": 10
+    }
+  },
+  {
+    "_id": "TUESDAY",
+    "values": {
+      "pop": 6,
+      "mpb": 10,
+      "classical": 5,
+      "rock": 15
+    }
+  },
+  {
+    "_id": "WEDNESDAY",
+    "values": {
+      "pop": 2,
+      "mpb": 15,
+      "classical": 8,
+      "rock": 15
+    }
+  },
+  {
+    "_id": "THURSDAY",
+    "values": {
+      "pop": 10,
+      "mpb": 20,
+      "classical": 13,
+      "rock": 15
+    }
+  },
+  {
+    "_id": "FRIDAY",
+    "values": {
+      "pop": 15,
+      "mpb": 25,
+      "classical": 18,
+      "rock": 20
+    }
+  },
+  {
+    "_id": "SATURDAY",
+    "values": {
+      "pop": 20,
+      "mpb": 30,
+      "classical": 25,
+      "rock": 40
+    }
+  }
+]

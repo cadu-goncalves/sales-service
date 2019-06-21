@@ -1,5 +1,9 @@
 # Viniland Album Sales Service
 
+[![Build Status](https://img.shields.io/circleci/project/github/cadu-goncalves/sales-service/master.svg)](https://circleci.com/gh/cadu-goncalves/sales-service/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/cadu-goncalves/sales-service/badge.svg?branch=master)](https://coveralls.io/github/cadu-goncalves/sales-service?branch=master)
+
+
 ## Description
 
 Album Sales Service, with the following features:
