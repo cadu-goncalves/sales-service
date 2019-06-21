@@ -16,5 +16,7 @@ public class JwtProperties {
 
     private String secret;
 
+    private String auth;
+
     private Map<String, Object> claims;
 }

@@ -40,17 +40,17 @@ server:
 # Migrations
 #--------------
 mongobee:
-    packageScan: com.viniland.sales.persistence.changelog
-    collections:
-        changes: change_logs
-        locks: change_locks
+  scan: com.viniland.sales.persistence.changelog
+  collections:
+    changes: change_logs
+    locks: change_locks
 
 #--------------
 # Spotify
 #--------------
 spotify:
-    id: ${SPOTIFY_CLIENT_ID}
-    secret: ${SPOTIFY_CLIENT_SECRET}
+  id: ${SPOTIFY_CLIENT_ID}
+  secret: ${SPOTIFY_CLIENT_SECRET}
 
 #--------------
 # JWT
@@ -59,6 +59,7 @@ spotify:
 #--------------
 jwt:
   secret: SgUkXp2s5v8y/B?E(H+MbQeThWmYq3t6w9z$C&F)J@NcRfUjXn2r4u7x!A%D*G-K
+  auth: /api/auth
   claims:
     iss: sales-service
 

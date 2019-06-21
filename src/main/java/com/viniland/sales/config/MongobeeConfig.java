@@ -39,7 +39,7 @@ public class MongobeeConfig {
         }
         runner.setDbName(mongoProperties.getDatabase());
         // Define where to look for changelogs
-        runner.setChangeLogsScanPackage(mongobeeProperties.getPackageScan());
+        runner.setChangeLogsScanPackage(mongobeeProperties.getScan());
         // Pass environment in order to track profiles
         runner.setSpringEnvironment(environment);
         return runner;

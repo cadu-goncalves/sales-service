@@ -14,7 +14,7 @@ import java.util.Map;
 @ConfigurationProperties("mongobee")
 public class MongobeeProperties {
 
-    private String packageScan;
+    private String scan;
 
     private Map<String, String> collections;
 
