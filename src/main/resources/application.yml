@@ -3,6 +3,14 @@
 #
 
 #--------------
+# Service
+#--------------
+service:
+  threads:
+    min: 5
+    max: 50
+
+#--------------
 # Spring
 #--------------
 spring:
@@ -29,6 +37,11 @@ spring:
     mongodb:
       database: db-sales
       host: ${MONGO_HOST:localhost}
+
+#--------------
+# Logging
+#--------------
+logging:
 
 #--------------
 # HTTP Server
@@ -62,7 +75,6 @@ jwt:
   auth: /api/auth
   claims:
     iss: sales-service
-
 
 #--------------
 # Springfox

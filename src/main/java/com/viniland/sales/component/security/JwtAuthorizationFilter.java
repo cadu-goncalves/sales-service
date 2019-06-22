@@ -54,7 +54,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                         .setSigningKey(signingKey)
                         .parseClaimsJws(token.replace("Bearer ", ""));
 
-                // Extract credentias
+                // Extract credentials
                 String username = claims.getBody().getSubject();
                 List<SimpleGrantedAuthority> authorities = ((List<?>) claims.getBody()
                         .get("roles")).stream()

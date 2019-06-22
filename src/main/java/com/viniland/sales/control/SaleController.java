@@ -1,7 +1,7 @@
 package com.viniland.sales.control;
 
 import com.viniland.sales.domain.rest.SaleResource;
-import com.viniland.sales.domain.rest.filter.SaleResourceFilter;
+import com.viniland.sales.domain.rest.filter.SaleFilter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
@@ -33,12 +33,13 @@ public class SaleController {
     @ApiOperation(value = "Search Sales")
     @PostMapping(value = "search")
     public @ResponseBody
-    DeferredResult<ResponseEntity> searchSales(@RequestBody @Validated SaleResourceFilter filter) {
+    DeferredResult<ResponseEntity> searchSales(@RequestBody @Validated SaleFilter filter) {
         DeferredResult<ResponseEntity> response = new DeferredResult<>();
         return response;
     }
 
     @ApiOperation(value = "Register Sale")
+    @PostMapping
     public @ResponseBody
     DeferredResult<ResponseEntity> registerSale(@RequestBody @Validated SaleResource body) {
         DeferredResult<ResponseEntity> response = new DeferredResult<>();

@@ -31,7 +31,6 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
      * API Web security filters and policies (unrestricted)
      */
     @Configuration
-    @Profile("no-auth")
     public static class UnrestrictedApiWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
@@ -74,6 +73,7 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
      * API Web security filters and policies
      */
     @Configuration
+    @Profile("auth")
     public static class ApiWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired

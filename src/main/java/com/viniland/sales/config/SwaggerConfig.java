@@ -29,7 +29,7 @@ public class SwaggerConfig {
      * @return {@link Docket}
      */
     @Bean
-    public Docket userApi() {
+    public Docket clientApi() {
         // Minimal configuration
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())

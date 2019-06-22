@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- Project -->
     <groupId>com.viniland</groupId>
     <artifactId>sales-service</artifactId>
     <version>1.0.0</version>
-
 
     <!-- Spring Boot -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.4.RELEASE</version>
+        <version>2.1.6.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -24,6 +24,7 @@
         <framework.lombok.version>1.18.2</framework.lombok.version>
         <framework.io.jsonwebtoken.version>0.10.5</framework.io.jsonwebtoken.version>
         <framweork.spotify.client.version>2.2.0</framweork.spotify.client.version>
+        <framework.modelmapper.version>2.3.0</framework.modelmapper.version>
 
         <!-- Plugins -->
         <plugin.surefire.version>2.22.1</plugin.surefire.version>
@@ -95,6 +96,33 @@
             <version>${framework.io.jsonwebtoken.version}</version>
         </dependency>
 
+        <!-- Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Swagger (Api) -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${framework.swagger.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${framework.swagger.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Model Mapper -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${framework.modelmapper.version}</version>
+        </dependency>
+
         <!-- Mongobee (Migrations for MongoDB)-->
         <dependency>
             <groupId>com.github.mongobee</groupId>
@@ -115,29 +143,6 @@
             <artifactId>lombok</artifactId>
             <version>${framework.lombok.version}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- Actuator -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <!-- Swagger (Automated Api Documentation) -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${framework.swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${framework.swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-bean-validators</artifactId>
-            <version>${framework.swagger.version}</version>
         </dependency>
 
         <!-- Test -->
@@ -248,5 +253,31 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <!-- Special Profiles -->
+    <profiles>
+        <profile>
+            <id>open-api</id>
+
+            <dependencies>
+                <!-- Swagger (Implementation) -->
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger2</artifactId>
+                    <version>${framework.swagger.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-swagger-ui</artifactId>
+                    <version>${framework.swagger.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>io.springfox</groupId>
+                    <artifactId>springfox-bean-validators</artifactId>
+                    <version>${framework.swagger.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
 </project>

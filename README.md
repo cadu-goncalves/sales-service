@@ -75,3 +75,9 @@ Provides local application instance ready to use
 ```
 $ make run-local
 ```
+
+## API Documentation
+
+To access the API documentation run the application and go to the following URL:
+
+[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
