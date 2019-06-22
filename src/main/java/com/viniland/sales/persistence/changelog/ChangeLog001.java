@@ -22,6 +22,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -64,6 +65,11 @@ public class ChangeLog001 {
         MongoCollection collection = jongo.getCollection(name);
 
         SpotifyApi api = SpotifyClient.getInstance();
+        if(Objects.isNull(api)) {
+            // Ignore and move on
+            return;
+        }
+
         Arrays.asList("rock", "mpb", "classical", "pop").forEach(genre -> {
             try {
                 // Bypass wrong result mapping by using the raw JSON

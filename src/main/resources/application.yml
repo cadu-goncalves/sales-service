@@ -53,6 +53,7 @@ server:
 # Migrations
 #--------------
 mongobee:
+  enabled: true
   scan: com.viniland.sales.persistence.changelog
   collections:
     changes: change_logs

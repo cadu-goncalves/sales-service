@@ -4,15 +4,17 @@ import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
 import com.viniland.sales.component.MongobeeProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
- * Bootstrap MongoDB integration.
+ * Bootstrap Mongobee integration.
  */
 @Configuration
+@ConditionalOnProperty(name = "mongobee.enabled", havingValue = "true")
 public class MongobeeConfig {
 
     @Autowired
