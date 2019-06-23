@@ -83,7 +83,7 @@ public class SaleController {
         return response;
     }
 
-    @ApiOperation(value = "Register Sale")
+    @ApiOperation(value = "Register Sale", response = SaleResource.class)
     @PostMapping
     public @ResponseBody
     DeferredResult<ResponseEntity> registerSale(@RequestBody @Validated SaleResource body) {

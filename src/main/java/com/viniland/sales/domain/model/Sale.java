@@ -40,15 +40,15 @@ public class Sale {
     @NotNull(message = "{sale.register.null}")
     private Date register;
 
-    @Field(value = "total_purchase")
+    @Field(value = "total")
     @NotNull(message = "{sale.purchase.null}")
     @Positive(message = "{sale.purchase.value}")
-    private Double totalPurchase;
+    private Double total;
 
-    @Field(value = "total_cashback")
+    @Field(value = "cashback")
     @NotNull(message = "{sale.cashback.null}")
     @Positive(message = "{sale.cashback.value}")
-    private Double totalCashback;
+    private Double cashback;
 
     /**
      * Sale item model

@@ -1,13 +1,16 @@
 package com.viniland.sales.domain.rest;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,27 +23,25 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 public class SaleResource {
 
-    @Getter(onMethod = @__( @JsonIgnore))
-    @Setter
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String id;
 
     @NotNull(message = "{sale.customer.null}")
     private Long customerId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+    @PastOrPresent(message = "{sale.register.invalid}")
     private Date register;
 
     @NotNull(message = "{sale.items.null}")
     @NotEmpty
     private Set<SaleItemResource> items;
 
-    @Getter(onMethod = @__( @JsonIgnore))
-    @Setter
-    private Double totalPurchase;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Double total;
 
-    @Getter(onMethod = @__( @JsonIgnore))
-    @Setter
-    private Double totalCashback;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Double cashback;
 
 
     /**
@@ -59,10 +60,11 @@ public class SaleResource {
         @Min(value = 1, message = "{sale.item.quantity.value}")
         private Integer quantity;
 
-        @Getter(onMethod = @__( @JsonIgnore))
-        @Setter
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         private Double price;
 
+        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        private Double cashback;
     }
 
 }

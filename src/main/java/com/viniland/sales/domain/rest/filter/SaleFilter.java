@@ -29,5 +29,6 @@ public class SaleFilter {
     @PastOrPresent(message = "{filter.date.from.invalid}")
     private Date from;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private Date to;
 }

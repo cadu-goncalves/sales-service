@@ -9,7 +9,7 @@ import javax.validation.constraints.Positive;
  * Cashback credit event
  */
 @Value
-public class CashBackCredit {
+public class CashbackCreditEvent {
 
     @NotNull
     private Long customerId;

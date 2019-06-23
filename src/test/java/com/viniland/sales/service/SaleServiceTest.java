@@ -231,7 +231,7 @@ public class SaleServiceTest {
 
         // Test
         Sale result = service.register(saleResource).get();
-        assertThat(result.getTotalPurchase(), equalTo(purchase));
-        assertThat(result.getTotalCashback(), equalTo(cashback));
+        assertThat(result.getTotal(), equalTo(purchase));
+        assertThat(result.getCashback(), equalTo(cashback));
     }
 }

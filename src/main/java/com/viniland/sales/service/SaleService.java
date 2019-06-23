@@ -148,8 +148,8 @@ public class SaleService {
         return Sale.builder()
                 .register(resource.getRegister())
                 .customerId(resource.getCustomerId())
-                .totalPurchase(total.get().doubleValue())
-                .totalCashback(casback.get().doubleValue())
+                .total(total.get().doubleValue())
+                .cashback(casback.get().doubleValue())
                 .items(items.values())
                 .build();
     }
