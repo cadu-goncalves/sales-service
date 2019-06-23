@@ -12,14 +12,15 @@ import java.util.Map;
 @Document(collection = "cashback_offers")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = { "id" })
 public class CashbackOffer {
 
     @Id
     private WeekDay id;
 
+    @Singular
     private Map<String, Double> values;
 
     /**

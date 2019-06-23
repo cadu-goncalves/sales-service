@@ -15,8 +15,8 @@ import java.util.Set;
 @Document(collection = "albums")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = { "id" })
 public class Album {
 

@@ -30,4 +30,5 @@ public class MongoDbConfig {
         converter.setTypeMapper(new DefaultMongoTypeMapper(null));
         return new MongoTemplate(factory, converter);
     }
+
 }

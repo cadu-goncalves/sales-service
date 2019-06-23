@@ -4,10 +4,13 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Date;
 import java.util.Set;
 
@@ -17,33 +20,43 @@ import java.util.Set;
 @Document(collection = "sales")
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = { "id" })
 public class Sale {
 
     @Id
-    private Long id;
+    private String id;
 
+    @Field(value = "customer_id")
     @NotNull(message = "{sale.customer.null}")
     private Long customerId;
 
     @NotNull(message = "{sale.items.null}")
     @Min(1)
+    @Singular
     private Set<SaleItem> items;
 
-    @NotNull(message = "{sale.createdAt.null}")
-    private Date createdAt;
+    @NotNull(message = "{sale.register.null}")
+    private Date register;
 
-    @Transient
+    @Field(value = "total_purchase")
+    @NotNull(message = "{sale.purchase.null}")
+    @Positive(message = "{sale.purchase.value}")
     private Double totalPurchase;
 
-    @Transient
+    @Field(value = "total_cashback")
+    @NotNull(message = "{sale.cashback.null}")
+    @Positive(message = "{sale.cashback.value}")
     private Double totalCashback;
 
     /**
      * Sale item model
      */
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     @EqualsAndHashCode(of = { "id" })
     public static class SaleItem {
 
@@ -61,5 +74,25 @@ public class Sale {
         @NotNull(message = "{sale.item.quantity.null}")
         @Min(value = 1, message = "{sale.item.quantity.value}")
         private Integer quantity;
+
+        /**
+         * Computes sale item total price
+         *
+         * @param context
+         * @return {@link BigDecimal}
+         */
+        public BigDecimal computePrice(MathContext context) {
+            return new BigDecimal(this.price, context).multiply(BigDecimal.valueOf(this.quantity));
+        }
+
+        /**
+         * Computes sale item total cashback
+         *
+         * @param context
+         * @return {@link BigDecimal}
+         */
+        public BigDecimal computeCashback(MathContext context) {
+            return new BigDecimal(this.cashback, context).multiply(BigDecimal.valueOf(this.quantity));
+        }
     }
 }

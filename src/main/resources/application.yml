@@ -42,6 +42,13 @@ spring:
 # Logging
 #--------------
 logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
 
 #--------------
 # HTTP Server
@@ -85,3 +92,6 @@ springfox:
     swagger:
       v2:
         path: /v1.0/api-docs
+
+
+

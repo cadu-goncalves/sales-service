@@ -2,6 +2,7 @@ package com.viniland.sales.service;
 
 import com.viniland.sales.domain.exception.AlbumException;
 import com.viniland.sales.domain.exception.DomainError;
+import com.viniland.sales.domain.exception.DomainException;
 import com.viniland.sales.domain.model.Album;
 import com.viniland.sales.domain.rest.filter.AlbumFilter;
 import com.viniland.sales.persistence.AlbumRepository;
@@ -51,11 +52,10 @@ public class AlbumService {
             }
 
             return findResult.get();
-        }, executor)
-                .exceptionally(throwable -> {
-                    log.error(throwable.getMessage());
-                    throw translateException(throwable);
-                });
+        }, executor).exceptionally(throwable -> {
+            log.error(throwable.getMessage());
+            throw translateException(throwable);
+        });
     }
 
     /**
@@ -83,22 +83,21 @@ public class AlbumService {
                 Example<Album> example = Example.of(probe, matcher);
                 return repository.findAll(example, page);
             }
-        }, executor)
-                .exceptionally(throwable -> {
-                    log.error(throwable.getMessage());
-                    throw translateException(throwable);
-                });
+        }, executor).exceptionally(throwable -> {
+            log.error(throwable.getMessage());
+            throw translateException(throwable);
+        });
     }
 
     /**
-     * Translate relevant exceptions into {@link AlbumException}
+     * Translate relevant exceptions into {@link DomainException}
      *
      * @param throwable {@link Throwable} original exception
      * @return {@link AlbumException}
      */
-    private AlbumException translateException(Throwable throwable) {
+    private DomainException translateException(Throwable throwable) {
         String message;
-        AlbumException exception;
+        DomainException exception;
 
         // Unwrap
         if (throwable instanceof CompletionException) {
@@ -106,9 +105,9 @@ public class AlbumService {
         }
 
         // Check
-        if (throwable instanceof AlbumException) {
+        if (throwable instanceof DomainException) {
             // Nothing to do
-            return (AlbumException) throwable;
+            return (DomainException) throwable;
         } else if (throwable instanceof DataIntegrityViolationException) {
             message = MessageUtils.getMessage("messages", "album.constraint.error");
             exception = new AlbumException(message, throwable, DomainError.CONSTRAINT_ERROR);
