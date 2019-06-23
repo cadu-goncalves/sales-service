@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
 /**
@@ -19,15 +20,17 @@ public class MongoDbConfig {
      * Customize {@link MongoTemplate}
      *
      * @param factory {@link MongoDbFactory}
+     * @param conversions {@link MongoCustomConversions}
      * @return {@link MongoTemplate}
      * @throws Exception
      */
     @Bean
-    public MongoTemplate mongoTemplate(MongoDbFactory factory) throws Exception {
+    public MongoTemplate mongoTemplate(MongoDbFactory factory, MongoCustomConversions conversions) throws Exception {
         // Don't include "_class" attribute on collections
         DefaultDbRefResolver resolver = new DefaultDbRefResolver(factory);
         MappingMongoConverter converter = new MappingMongoConverter(resolver, new MongoMappingContext());
         converter.setTypeMapper(new DefaultMongoTypeMapper(null));
+        converter.setCustomConversions(conversions);
         return new MongoTemplate(factory, converter);
     }
 

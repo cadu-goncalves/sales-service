@@ -4,32 +4,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.viniland.sales.domain.exception.DomainError;
 import com.viniland.sales.domain.exception.SaleException;
 import com.viniland.sales.domain.model.Sale;
-import com.viniland.sales.domain.rest.filter.AlbumFilter;
+import com.viniland.sales.domain.rest.filter.SaleFilter;
 import com.viniland.sales.service.SaleService;
+import com.viniland.sales.util.MessageUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -51,7 +52,7 @@ public class SaleControllerTest {
 
     private Sale sale;
 
-    private AlbumFilter filter;
+    private SaleFilter filter;
 
     private ObjectMapper mapper;
 
@@ -72,7 +73,7 @@ public class SaleControllerTest {
                 .item(new Sale.SaleItem("bbb", 22.12D, 4.2D, 3))
                 .build();
 
-        filter = new AlbumFilter();
+        filter = new SaleFilter();
 
         // Reset mocks
         reset(mockService);
@@ -83,7 +84,6 @@ public class SaleControllerTest {
      * @throws Exception
      */
     @Test
-    @Ignore
     public void itHandlesRetrieve() throws Exception {
         // Mock behaviours
         when(mockService.retrieve(sale.getId())).thenReturn(CompletableFuture.completedFuture(sale));
@@ -97,13 +97,11 @@ public class SaleControllerTest {
                 .andReturn();
 
         // Check
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         mockMvc.perform(asyncDispatch(result))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(sale.getId()))
                 .andExpect(jsonPath("$.customerId").value(sale.getCustomerId()))
-                .andExpect(jsonPath("$.register").value(df.format(sale.getRegister())))
                 .andExpect(jsonPath("$.items[0].id").value("xxx"))
                 .andExpect(jsonPath("$.items[0].quantity").value(1))
                 .andExpect(jsonPath("$.items[1].id").value("bbb"))
@@ -142,5 +140,74 @@ public class SaleControllerTest {
 
         // Check mock iteration
         verify(mockService).retrieve(sale.getId());
+    }
+
+    /**
+     * Test scenario for POST search with invalid filter
+     *
+     * @throws Exception
+     */
+    @Test
+    public void itHandlesInvalidSearch() throws Exception {
+        // Invalid payload
+        filter.setPage(-1);
+        filter.setSize(1000);
+        String payload = mapper.writeValueAsString(filter);
+
+        // Expected messages (attached by ErrorController)
+        String msgPage = MessageUtils.getMessage("messages", "filter.page.invalid");
+        String msgSize = MessageUtils.getMessage("messages", "filter.size.invalid");
+
+        // Request
+        MockHttpServletRequestBuilder reqBuilder = post("/api/sales/search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload);
+
+        // Call & Check
+        mockMvc.perform(reqBuilder)
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString(msgPage)))
+                .andExpect(content().string(containsString(msgSize)));
+    }
+
+    /**
+     * Test scenario for GET sale search
+     *
+     * @throws Exception
+     */
+    @Test
+    public void itHandlesSearch() throws Exception {
+        // Mock behaviours
+        List<Sale> content = new ArrayList<>();
+        content.add(sale);
+        Page page = new PageImpl(content, Pageable.unpaged(), 1);
+        when(mockService.search(filter)).thenReturn(CompletableFuture.completedFuture(page));
+
+        // Request
+        String payload = mapper.writeValueAsString(filter);
+        MockHttpServletRequestBuilder reqBuilder = post("/api/sales/search")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload);
+
+
+        // Call
+        MvcResult result = mockMvc.perform(reqBuilder)
+                .andExpect(request().asyncStarted())
+                .andReturn();
+
+        // Check
+        mockMvc.perform(asyncDispatch(result))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.page").value(filter.getPage()))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.matches").value(1))
+                .andExpect(jsonPath("$.content[0].id").value(sale.getId()))
+                .andExpect(jsonPath("$.content[0].items[0].id").value("xxx"))
+                .andExpect(jsonPath("$.content[0].items[1].id").value("bbb"));
+
+        // Check mock iteration
+        verify(mockService).search(filter);
     }
 }

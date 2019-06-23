@@ -7,7 +7,6 @@ import com.viniland.sales.domain.model.Album;
 import com.viniland.sales.domain.model.CashbackOffer;
 import com.viniland.sales.domain.model.Sale;
 import com.viniland.sales.domain.rest.SaleResource;
-import com.viniland.sales.domain.rest.filter.AlbumFilter;
 import com.viniland.sales.domain.rest.filter.SaleFilter;
 import com.viniland.sales.persistence.AlbumRepository;
 import com.viniland.sales.persistence.CashbackOfferRepository;
@@ -18,7 +17,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -123,7 +121,7 @@ public class SaleServiceTest {
     public void itSearchesSales() throws Exception {
         // Input fixtures
         SaleFilter filter = new SaleFilter();
-        Sort sort = Sort.by(Sort.Direction.ASC, "register");
+        Sort sort = Sort.by(Sort.Direction.DESC, "register");
         PageRequest reqPage = PageRequest.of(filter.getPage(), filter.getSize(), sort);
 
         // Output fixtures
@@ -152,30 +150,49 @@ public class SaleServiceTest {
      */
     @Test
     public void itSearchesSalesFiltering() throws Exception {
-        // Input fixtures
+        // Input fixtures (invalid range)
+        Calendar c = Calendar.getInstance();
         SaleFilter filter = new SaleFilter();
-        filter.setFrom(new Date());
-        filter.setTo(new Date());
-        Sort sort = Sort.by(Sort.Direction.ASC, "register");
-        PageRequest reqPage = PageRequest.of(filter.getPage(), filter.getSize(), sort);
+        filter.setFrom(c.getTime());
+        c.roll(Calendar.MONTH, -1);
+        filter.setTo(c.getTime());
 
-        // Output fixtures
-        List<Sale> content = new ArrayList<>();
-        content.add(sale);
-        Page page = new PageImpl(content, reqPage, 1);
-
-        //  Mock behaviours
-        when(mockRepo.findByRegisterBetween(any(Date.class), any(Date.class), eq(reqPage))).thenReturn(page);
-
-        // Test
-        Page<Sale> result = service.search(filter).get();
-        assertThat(result.getContent(), hasItem(sale));
-        assertThat(result.getNumber(), equalTo(filter.getPage()));
-        assertThat(result.getTotalPages(), equalTo(page.getTotalPages()));
-
-        // Check mock iteration
-        verify(mockRepo).findByRegisterBetween(any(Date.class), any(Date.class), eq(reqPage));
+        // Test (must throw exception)
+        try {
+            service.search(filter).get();
+            Assert.fail();
+        } catch (Exception e) {
+            if (!(e.getCause() instanceof SaleException)) {
+                Assert.fail();
+            }
+        }
     }
+
+    /**
+     * Test scenario for sale search with invalid range
+     *
+     * @throws Exception
+     */
+    @Test
+    public void itThrowsSaleInvalidRangeFilter() throws Exception {
+        // Input fixtures
+        saleResource = ResourceBuilder.asResource(sale, SaleResource.class);
+
+        // Mock behaviours (find just one album)
+        Album found = Album.builder().id("xxx").build();
+        when(mockAlbumRepo.findAllById(any(Iterable.class))).thenReturn(Lists.newArrayList(found));
+
+        // Test (must throw exception)
+        try {
+            service.register(saleResource).get();
+            Assert.fail();
+        } catch (Exception e) {
+            if (!(e.getCause() instanceof SaleItemException)) {
+                Assert.fail();
+            }
+        }
+    }
+
 
     /**
      * Test scenario for sale register with invalid items

@@ -13,4 +13,5 @@ import java.util.Date;
 public interface SaleRepository extends PagingAndSortingRepository<Sale, String>, QueryByExampleExecutor<Sale> {
 
     Page<Sale> findByRegisterBetween(Date from, Date to, Pageable page);
+
 }

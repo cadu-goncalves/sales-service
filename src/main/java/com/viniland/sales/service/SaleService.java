@@ -93,8 +93,16 @@ public class SaleService {
         return CompletableFuture.supplyAsync(() -> {
             log.info("Search albums: {}", filter);
 
+            // Check date range
+            if (Objects.nonNull(filter.getFrom()) && Objects.nonNull(filter.getTo())) {
+                if(!filter.getFrom().before(filter.getTo())) {
+                    String message = MessageUtils.getMessage("messages", "filter.date.range.invalid");
+                    throw new SaleException(message, DomainError.RETRIEVE_ERROR);
+                }
+            }
+
             // Sort & Pagination
-            Sort sort = Sort.by(Sort.Direction.ASC, "register");
+            Sort sort = Sort.by(Sort.Direction.DESC, "register");
             PageRequest page = PageRequest.of(filter.getPage(), filter.getSize(), sort);
 
             // Find

@@ -146,9 +146,9 @@ public class AlbumControllerTest {
         filter.setSize(1000);
         String payload = mapper.writeValueAsString(filter);
 
-        // Expected messages (attached by CustomHandler)
-        String msgPassword = MessageUtils.getMessage("messages", "filter.page.invalid");
-        String msgProfile = MessageUtils.getMessage("messages", "filter.size.invalid");
+        // Expected messages (attached by ErrorController)
+        String msgPage = MessageUtils.getMessage("messages", "filter.page.invalid");
+        String msgSize = MessageUtils.getMessage("messages", "filter.size.invalid");
 
         // Request
         MockHttpServletRequestBuilder reqBuilder = post("/api/albums/search")
@@ -159,8 +159,8 @@ public class AlbumControllerTest {
         mockMvc.perform(reqBuilder)
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString(msgPassword)))
-                .andExpect(content().string(containsString(msgProfile)));
+                .andExpect(content().string(containsString(msgPage)))
+                .andExpect(content().string(containsString(msgSize)));
     }
 
     /**

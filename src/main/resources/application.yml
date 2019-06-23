@@ -42,13 +42,6 @@ spring:
 # Logging
 #--------------
 logging:
-  level:
-    org:
-      springframework:
-        data:
-          mongodb:
-            core:
-              MongoTemplate: DEBUG
 
 #--------------
 # HTTP Server
