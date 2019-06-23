@@ -1,6 +1,8 @@
 package com.viniland.sales.service;
 
 import com.viniland.sales.component.SpringContext;
+import com.viniland.sales.component.kafka.CashbackCreditProducer;
+import com.viniland.sales.domain.event.CashbackCreditEvent;
 import com.viniland.sales.domain.exception.DomainError;
 import com.viniland.sales.domain.exception.DomainException;
 import com.viniland.sales.domain.exception.SaleException;
@@ -30,7 +32,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.MessageFormat;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -49,13 +50,16 @@ public class SaleService {
 
     private final AlbumRepository albumRepository;
 
+    private final CashbackCreditProducer producer;
+
     private Map<CashbackOffer.WeekDay, Map<String, Double>> offers;
 
     public SaleService(TaskExecutor executor, SaleRepository repository,
-                       AlbumRepository albumRepository) {
+                       AlbumRepository albumRepository, CashbackCreditProducer producer) {
         this.executor = executor;
         this.repository = repository;
         this.albumRepository = albumRepository;
+        this.producer = producer;
         offers = new HashMap<>();
     }
 
@@ -95,7 +99,7 @@ public class SaleService {
 
             // Check date range
             if (Objects.nonNull(filter.getFrom()) && Objects.nonNull(filter.getTo())) {
-                if(!filter.getFrom().before(filter.getTo())) {
+                if (!filter.getFrom().before(filter.getTo())) {
                     String message = MessageUtils.getMessage("messages", "filter.date.range.invalid");
                     throw new SaleException(message, DomainError.RETRIEVE_ERROR);
                 }
@@ -107,8 +111,16 @@ public class SaleService {
 
             // Find
             if (Objects.isNull(filter.getFrom()) && Objects.isNull(filter.getTo())) {
+                // No range
                 return repository.findAll(page);
+            } else if (Objects.isNull(filter.getFrom())) {
+                // To date
+                return repository.findByRegisterTo(filter.getTo(), page);
+            } else if (Objects.isNull(filter.getTo())) {
+                // From date
+                return repository.findByRegisterFrom(filter.getFrom(), page);
             } else {
+                // Between dates
                 return repository.findByRegisterBetween(filter.getFrom(), filter.getTo(), page);
             }
         }, executor).exceptionally(throwable -> {
@@ -131,7 +143,10 @@ public class SaleService {
             // Compute sale based on items
             Sale sale = computeSale(items, resource);
             // Register sale/items
-            return repository.save(sale);
+            sale = repository.save(sale);
+            // Emit credit
+            producer.send(new CashbackCreditEvent(sale.getCustomerId(), sale.getCashback()));
+            return sale;
         }, executor).exceptionally(throwable -> {
             log.error(throwable.getMessage());
             throw translateException(throwable);
@@ -169,7 +184,7 @@ public class SaleService {
      * @return
      */
     private Map<String, Sale.SaleItem> computeItems(SaleResource resource) {
-        if(offers.isEmpty()) {
+        if (offers.isEmpty()) {
             // Retry
             retrieveOffers();
         }

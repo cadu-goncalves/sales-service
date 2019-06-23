@@ -1,6 +1,7 @@
 package com.viniland.sales.service;
 
 import com.google.common.collect.Lists;
+import com.viniland.sales.component.kafka.CashbackCreditProducer;
 import com.viniland.sales.domain.exception.SaleException;
 import com.viniland.sales.domain.exception.SaleItemException;
 import com.viniland.sales.domain.model.Album;
@@ -20,7 +21,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
@@ -46,6 +50,9 @@ public class SaleServiceTest {
 
     @MockBean
     private CashbackOfferRepository mockOfferRepo;
+
+    @MockBean
+    private CashbackCreditProducer mockProducer;
 
     @Autowired
     private SaleService service;

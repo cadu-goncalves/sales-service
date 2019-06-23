@@ -1,6 +1,38 @@
-sales-db:
-  container_name: sales_db
-  image: mongo:4.0.1-xenial
-  ports:
-    - 27017:27017
+version: '3.6'
 
+services:
+
+  sales-db:
+    container_name: sales_db
+    image: mongo:4.0.1-xenial
+    ports:
+      - 27017:27017
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    container_name: zookeeper
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    volumes:
+      - .data/zookeeper/data:/data
+      - .data/zookeeper/datalog:/datalog
+
+  kafka:
+    image: confluentinc/cp-kafka:5.1.0
+    container_name: kafka
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - ./.data/kafka/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper

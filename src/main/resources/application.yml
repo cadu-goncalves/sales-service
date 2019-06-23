@@ -9,6 +9,8 @@ service:
   threads:
     min: 5
     max: 50
+  topics:
+    cashback: cashback-credit
 
 #--------------
 # Spring
@@ -36,7 +38,13 @@ spring:
   data:
     mongodb:
       database: db-sales
-      host: ${MONGO_HOST:localhost}
+      host: ${MONGO_SERVERS:localhost}
+
+  # Kafka CashbackCreditProducer
+  kafka:
+    bootstrap-servers: ${KAFKA_SERVERS:localhost}
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
 
 #--------------
 # Logging
@@ -58,6 +66,8 @@ mongobee:
   collections:
     changes: change_logs
     locks: change_locks
+
+
 
 #--------------
 # Spotify

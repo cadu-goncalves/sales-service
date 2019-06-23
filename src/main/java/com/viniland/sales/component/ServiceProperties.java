@@ -5,6 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Data
@@ -12,6 +14,8 @@ import javax.annotation.PostConstruct;
 public class ServiceProperties {
 
     private ThreadPool threads = new ThreadPool();
+
+    private Map<String, String> topics = new HashMap<>();
 
     @Data
     public static class ThreadPool {

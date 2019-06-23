@@ -1,8 +1,10 @@
 FROM        openjdk:8-jdk-alpine
 
+ARG         JAR_FILE
+
 ENV         OS_PACKAGES "curl"
 ENV         APP_HOME /home/sales-service
-ARG         JAR_FILE
+
 
 # Dependencies
 RUN         apk add ${OS_PACKAGES} --update --no-cache && \
@@ -19,7 +21,7 @@ VOLUME      /tmp
 COPY        ${JAR_FILE} service.jar
 
 # Health
-HEALTHCHECK CMD curl http://localhost:8080/actuator/health
+HEALTHCHECK --interval=5m CMD curl -s http://localhost:8080/actuator/health | grep UP
 
 # Run
 ENTRYPOINT  ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/service.jar"]

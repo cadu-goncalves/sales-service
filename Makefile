@@ -12,7 +12,8 @@ run-local:
 # Build
 # -----------
 build:
-	docker-compose up -d; \
+	docker-compose rm -s --force; \
+	docker-compose up -d sales-db; \
 	mvn clean package; \
 	docker-compose rm -s --force
 
@@ -21,7 +22,8 @@ build:
 # Tests
 # -----------
 test:
-	docker-compose up -d; \
+	docker-compose rm -s --force; \
+	docker-compose up -d sales-db; \
 	mvn clean test; \
 	docker-compose rm -s --force
 

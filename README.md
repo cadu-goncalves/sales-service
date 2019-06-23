@@ -41,7 +41,30 @@ Album Sales Service, with the following features:
 * [Mongobee](https://github.com/mongobee/mongobee) Data migrations for MongoDB
 * [Springfox](https://springfox.github.io/springfox/) Provides API automated documentation based on definitions pointed by [Swagger](https://swagger.io/)
 
+
+## External integrations
+
+This application uses some integrations governed by environment variables as follows:
+
+- SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET: required to access [Spotify API](https://developer.spotify.com/documentation/web-api/quick-start/) and polulate the internal albums collection.
+- COVERALLS_TOKEN: required to publish code coverage report to [Coveralls](https://coveralls.io)
+- DOCKER_HUB_USER, DOCKER_HUB_PASSWORD: Required for [Docker Hub](https://hub.docker.com) container deployment
+- MONGO_SERVERS: URI for MongoDB servers, default to `localhost`
+- KAFKA_SERVERS: URI for Kafka servers, default to `localhost`
+
+
+## Maven profiles
+
+This project uses the following Maven profiles (build time profiles):
+
+- open-api: Enables the Open API documentation `enabled by default`
  
+## Spring profiles
+
+This project uses the following Spring profiles (run time profiles):
+
+- auth: Enables endpoint authorization/authentication `disabled by default`
+
 ## Build
 
 The project ships with a Makefile that can be used as follows:
