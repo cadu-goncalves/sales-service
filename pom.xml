@@ -33,11 +33,17 @@
         <plugin.coveralls.jaxb.version>2.2.3</plugin.coveralls.jaxb.version>
         <plugin.dockerfile.version>1.3.6</plugin.dockerfile.version>
         <plugin.dockerfile.javax-activation.version>1.1.1</plugin.dockerfile.javax-activation.version>
+        <plugin.sonar.version>3.6.0.1398</plugin.sonar.version>
 
         <!-- Project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+
+        <!-- Sonar -->
+        <sonar.organization>cadu-goncalves</sonar.organization>
+        <sonar.projectKey>${sonar.organization}_${artifactId}</sonar.projectKey>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
@@ -231,6 +237,13 @@
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
+            </plugin>
+
+            <!-- Sonar -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${plugin.sonar.version}</version>
             </plugin>
         </plugins>
     </build>

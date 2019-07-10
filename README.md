@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/circleci/project/github/cadu-goncalves/sales-service/master.svg)](https://circleci.com/gh/cadu-goncalves/sales-service/tree/master)
 [![Coverage Status](https://coveralls.io/repos/github/cadu-goncalves/sales-service/badge.svg?branch=master)](https://coveralls.io/github/cadu-goncalves/sales-service?branch=master)
-
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=cadu-goncalves_sales-service&metric=alert_status)](https://sonarcloud.io/dashboard?id=cadu-goncalves_sales-service)
 
 ## Description
 

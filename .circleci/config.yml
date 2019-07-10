@@ -84,8 +84,8 @@ jobs:
     - attach_workspace: *_restore_workspace
     - restore_cache: *_restore_cache_dependencies
     - run:
-        name: Build Report
-        command: mvn jacoco:report coveralls:report
+        name: Build Reports
+        command: mvn jacoco:report coveralls:report sonar:sonar -Dsonar.login=$SONAR_LOGIN_TOKEN
     - save_cache: *_cache_dependencies
     - persist_to_workspace: *_save_workspace
 
