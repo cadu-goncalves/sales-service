@@ -22,10 +22,9 @@ public class MongoDbConfig {
      * @param factory {@link MongoDbFactory}
      * @param conversions {@link MongoCustomConversions}
      * @return {@link MongoTemplate}
-     * @throws Exception
      */
     @Bean
-    public MongoTemplate mongoTemplate(MongoDbFactory factory, MongoCustomConversions conversions) throws Exception {
+    public MongoTemplate mongoTemplate(MongoDbFactory factory, MongoCustomConversions conversions) {
         // Don't include "_class" attribute on collections
         DefaultDbRefResolver resolver = new DefaultDbRefResolver(factory);
         MappingMongoConverter converter = new MappingMongoConverter(resolver, new MongoMappingContext());

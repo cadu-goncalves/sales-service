@@ -3,7 +3,6 @@ package com.viniland.sales.config;
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
 import com.viniland.sales.component.MongobeeProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,26 +16,23 @@ import org.springframework.core.env.Environment;
 @ConditionalOnProperty(name = "mongobee.enabled", havingValue = "true")
 public class MongobeeConfig {
 
-    @Autowired
-    private MongoProperties mongoProperties;
-
-    @Autowired
-    private MongobeeProperties mongobeeProperties;
-
     /**
      * Factory for database migration runner
      *
-     * @param environment {@link Environment}
-     * @param  client {@link MongoClient}
+     * @param environment        {@link Environment}
+     * @param client             {@link MongoClient}
+     * @param mongoProperties    {@link MongoProperties}
+     * @param mongobeeProperties {@link MongobeeProperties}
      * @return {@link Mongobee}
      */
     @Bean
-    public Mongobee mongobee(Environment environment, MongoClient client) {
+    public Mongobee mongobee(Environment environment, MongoClient client,
+                             MongoProperties mongoProperties, MongobeeProperties mongobeeProperties) {
         Mongobee runner = new Mongobee(client);
-        if(mongobeeProperties.getCollections().keySet().contains("changes")) {
+        if (mongobeeProperties.getCollections().keySet().contains("changes")) {
             runner.setChangelogCollectionName(mongobeeProperties.getCollections().get("changes"));
         }
-        if(mongobeeProperties.getCollections().keySet().contains("locks")) {
+        if (mongobeeProperties.getCollections().keySet().contains("locks")) {
             runner.setLockCollectionName(mongobeeProperties.getCollections().get("locks"));
         }
         runner.setDbName(mongoProperties.getDatabase());

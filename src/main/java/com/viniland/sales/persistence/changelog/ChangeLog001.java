@@ -32,7 +32,7 @@ import java.util.Set;
 @Slf4j
 public class ChangeLog001 {
 
-    public static MathContext MATH_CONTEXT = new MathContext(4, RoundingMode.HALF_UP);
+    public static final MathContext MATH_CONTEXT = new MathContext(4, RoundingMode.HALF_UP);
 
     /**
      * Import cashbacks offers
@@ -47,7 +47,7 @@ public class ChangeLog001 {
         try {
             File file = ResourceUtils.getFile("classpath:changelog/001/cashback_offer.json");
             ArrayNode data = (ArrayNode) new ObjectMapper().readTree(file);
-            data.elements().forEachRemaining(e -> collection.insert(e));
+            data.elements().forEachRemaining(collection::insert);
         } catch (IOException ioe) {
             log.error("Unable to perform migration", ioe);
             throw new RuntimeException(ioe);
