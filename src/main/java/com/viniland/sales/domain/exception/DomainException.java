@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class DomainException extends RuntimeException {
 
-    private DomainError error;
+    private final DomainError error;
 
     public DomainException(String message, DomainError error) {
         super(message);

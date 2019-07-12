@@ -25,6 +25,8 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 @Slf4j
 public class AlbumService {
 
+    private static final String MESSAGES_BUNDLE = "messages";
+
     private final TaskExecutor executor;
 
     private final AlbumRepository repository;
@@ -47,7 +49,7 @@ public class AlbumService {
             Optional<Album> findResult = repository.findById(id);
             if (!findResult.isPresent()) {
                 // Not found
-                String message = MessageUtils.getMessage("messages", "album.notfound");
+                String message = MessageUtils.getMessage(MESSAGES_BUNDLE, "album.notfound");
                 throw new AlbumException(message, DomainError.RETRIEVE_ERROR);
             }
 
@@ -109,13 +111,13 @@ public class AlbumService {
             // Nothing to do
             return (DomainException) throwable;
         } else if (throwable instanceof DataIntegrityViolationException) {
-            message = MessageUtils.getMessage("messages", "album.constraint.error");
+            message = MessageUtils.getMessage(MESSAGES_BUNDLE, "album.constraint.error");
             exception = new AlbumException(message, throwable, DomainError.CONSTRAINT_ERROR);
         } else if (throwable instanceof DataAccessException) {
-            message = MessageUtils.getMessage("messages", "album.access.error");
+            message = MessageUtils.getMessage(MESSAGES_BUNDLE, "album.access.error");
             exception = new AlbumException(message, throwable, DomainError.IO_ERROR);
         } else {
-            message = MessageUtils.getMessage("messages", "error");
+            message = MessageUtils.getMessage(MESSAGES_BUNDLE, "error");
             exception = new AlbumException(message, throwable, DomainError.ERROR);
         }
 

@@ -43,7 +43,7 @@ public class ResourceBuilder {
     public static <T> ResourcePage<T> asPage(Page<?> domain, Class<T> resourceType) {
         // Map resources
         List<T> resources = domain.getContent().stream()
-                .map((v) -> asResource(v, resourceType))
+                .map(v -> asResource(v, resourceType))
                 .collect(Collectors.toList());
 
         // Build page

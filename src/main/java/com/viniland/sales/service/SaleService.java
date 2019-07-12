@@ -42,7 +42,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SaleService {
 
-    private static MathContext MATH_CONTEXT = new MathContext(4, RoundingMode.HALF_UP);
+    private static final String MESSAGES_BUNDLE = "messages";
+
+    private static final MathContext MATH_CONTEXT = new MathContext(4, RoundingMode.HALF_UP);
 
     private final TaskExecutor executor;
 
@@ -76,7 +78,7 @@ public class SaleService {
             Optional<Sale> findResult = repository.findById(id);
             if (!findResult.isPresent()) {
                 // Not found
-                String message = MessageUtils.getMessage("messages", "sale.notfound");
+                String message = MessageUtils.getMessage(MESSAGES_BUNDLE, "sale.notfound");
                 throw new SaleException(message, DomainError.RETRIEVE_ERROR);
             }
 
@@ -100,7 +102,7 @@ public class SaleService {
             // Check date range
             if (Objects.nonNull(filter.getFrom()) && Objects.nonNull(filter.getTo())) {
                 if (!filter.getFrom().before(filter.getTo())) {
-                    String message = MessageUtils.getMessage("messages", "filter.date.range.invalid");
+                    String message = MessageUtils.getMessage(MESSAGES_BUNDLE, "filter.date.range.invalid");
                     throw new SaleException(message, DomainError.RETRIEVE_ERROR);
                 }
             }
@@ -209,7 +211,7 @@ public class SaleService {
             Set<String> found = albums.stream().map(Album::getId).collect(Collectors.toSet());
             Set<String> notFound = new HashSet<>(items.keySet());
             notFound.removeAll(found);
-            String fmtMessage = MessageUtils.getMessage("messages", "sale.item.notfound");
+            String fmtMessage = MessageUtils.getMessage(MESSAGES_BUNDLE, "sale.item.notfound");
             String message = MessageFormat.format(fmtMessage, String.join(",", notFound));
             throw new SaleItemException(message, DomainError.CREATE_ERROR);
         }
@@ -252,13 +254,13 @@ public class SaleService {
             // Nothing to do
             return (DomainException) throwable;
         } else if (throwable instanceof DataIntegrityViolationException) {
-            message = MessageUtils.getMessage("messages", "sale.constraint.error");
+            message = MessageUtils.getMessage(MESSAGES_BUNDLE, "sale.constraint.error");
             exception = new SaleException(message, throwable, DomainError.CONSTRAINT_ERROR);
         } else if (throwable instanceof DataAccessException) {
-            message = MessageUtils.getMessage("messages", "sale.access.error");
+            message = MessageUtils.getMessage(MESSAGES_BUNDLE, "sale.access.error");
             exception = new SaleException(message, throwable, DomainError.IO_ERROR);
         } else {
-            message = MessageUtils.getMessage("messages", "error");
+            message = MessageUtils.getMessage(MESSAGES_BUNDLE, "error");
             exception = new SaleException(message, throwable, DomainError.ERROR);
         }
 
@@ -275,7 +277,7 @@ public class SaleService {
     @PostConstruct
     @Scheduled(cron = "0 */12 * * *")
     private void retrieveOffers() {
-        CashbackOfferRepository repository = SpringContext.getBean(CashbackOfferRepository.class);
-        repository.findAll().forEach(offer -> offers.put(offer.getId(), offer.getValues()));
+        CashbackOfferRepository cashbackOfferRepository = SpringContext.getBean(CashbackOfferRepository.class);
+        cashbackOfferRepository.findAll().forEach(offer -> offers.put(offer.getId(), offer.getValues()));
     }
 }

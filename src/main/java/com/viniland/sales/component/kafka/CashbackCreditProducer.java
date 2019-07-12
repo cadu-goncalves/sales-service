@@ -25,7 +25,7 @@ public class CashbackCreditProducer {
     public void send(CashbackCreditEvent event) {
         String topic = properties.getTopics().get("cashback");
         log.info("Publish to topic {} event {}", topic, event);
-        this.template.send(topic, event);
+        this.template.send(topic, event.getCustomerId().toString(), event);
     }
 
 }

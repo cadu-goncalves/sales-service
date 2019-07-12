@@ -39,6 +39,7 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
         @Autowired
         private JwtProperties jwtProperties;
 
+        @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
 
@@ -82,6 +83,7 @@ public class WebSecurityConfig extends GlobalMethodSecurityConfiguration {
         @Autowired
         private JwtProperties jwtProperties;
 
+        @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
 

@@ -1,8 +1,6 @@
 package com.viniland.sales.control;
 
-import com.viniland.sales.domain.model.Album;
 import com.viniland.sales.domain.model.Sale;
-import com.viniland.sales.domain.rest.AlbumResource;
 import com.viniland.sales.domain.rest.ResourceError;
 import com.viniland.sales.domain.rest.SaleResource;
 import com.viniland.sales.domain.rest.filter.SaleFilter;
