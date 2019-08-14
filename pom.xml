@@ -27,7 +27,7 @@
         <framework.modelmapper.version>2.3.0</framework.modelmapper.version>
 
         <!-- Plugins -->
-        <plugin.surefire.version>2.22.1</plugin.surefire.version>
+        <plugin.surefire.version>2.22.2</plugin.surefire.version>
         <plugin.jacoco.version>0.8.2</plugin.jacoco.version>
         <plugin.coveralls.version>4.3.0</plugin.coveralls.version>
         <plugin.coveralls.jaxb.version>2.2.3</plugin.coveralls.jaxb.version>
