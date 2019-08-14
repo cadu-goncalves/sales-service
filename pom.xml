@@ -22,7 +22,7 @@
         <framework.swagger.version>2.7.0</framework.swagger.version>
         <framework.mongobee.version>0.13</framework.mongobee.version>
         <framework.lombok.version>1.18.2</framework.lombok.version>
-        <framework.io.jsonwebtoken.version>0.10.5</framework.io.jsonwebtoken.version>
+        <framework.io.jsonwebtoken.version>0.10.7</framework.io.jsonwebtoken.version>
         <framweork.spotify.client.version>2.2.0</framweork.spotify.client.version>
         <framework.modelmapper.version>2.3.0</framework.modelmapper.version>
 
