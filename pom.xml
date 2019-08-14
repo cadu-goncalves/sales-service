@@ -28,7 +28,7 @@
 
         <!-- Plugins -->
         <plugin.surefire.version>2.22.1</plugin.surefire.version>
-        <plugin.jacoco.version>0.8.2</plugin.jacoco.version>
+        <plugin.jacoco.version>0.8.4</plugin.jacoco.version>
         <plugin.coveralls.version>4.3.0</plugin.coveralls.version>
         <plugin.coveralls.jaxb.version>2.2.3</plugin.coveralls.jaxb.version>
         <plugin.dockerfile.version>1.3.6</plugin.dockerfile.version>
