@@ -19,7 +19,7 @@
 
     <properties>
         <!-- Frameworks -->
-        <framework.swagger.version>2.7.0</framework.swagger.version>
+        <framework.swagger.version>2.9.2</framework.swagger.version>
         <framework.mongobee.version>0.13</framework.mongobee.version>
         <framework.lombok.version>1.18.2</framework.lombok.version>
         <framework.io.jsonwebtoken.version>0.10.5</framework.io.jsonwebtoken.version>
